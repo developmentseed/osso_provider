@@ -48,21 +48,6 @@ function osso_provider_menu_alter(&$items) {
 }
 
 /**
- * Implementation of hook_form_alter()
- */
-function osso_provider_form_alter(&$form, $form_state, $form_id) {
-  if ($form_id == 'user_register' || $form_id == 'user_login' || $form_id == 'user_pass') {
-    $links = array(
-      l(t('Log in'), 'user/login'),
-      l(t('Sign up'), 'user/register'),
-      l(t('Forgot password?'), 'user/password')
-    );
-    $form['links']['#value'] = theme('item_list', $links, NULL, 'ul', array('class' => 'links osso-tabs'));
-    $form['links']['#weight'] = -40;
-  }
-}
-
-/**
  * Custom title callback.
  */
 function osso_provider_user_menu_title() {

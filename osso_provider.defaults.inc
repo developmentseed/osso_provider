@@ -1,13 +1,63 @@
 <?php
 
 /**
+ * Helper to implementation of hook_context_default_contexts().
+ */
+function _osso_provider_context_default_contexts() {
+  $export = array();
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
+  $context->name = 'osso_provider_login';
+  $context->description = '';
+  $context->tag = 'OSSO Provider';
+  $context->conditions = array(
+    'path' => array(
+      'values' => array(
+        'user' => 'user',
+        'user/*' => 'user/*',
+      ),
+    ),
+    'user' => array(
+      'values' => array(
+        'anonymous user' => 'anonymous user',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'osso_provider-login_message' => array(
+          'module' => 'osso_provider',
+          'delta' => 'login_message',
+          'region' => 'right',
+          'weight' => 0,
+        ),
+      ),
+      'layout' => 'default',
+    ),
+  );
+  $context->condition_mode = 1;
+
+  $translatables['osso_provider_login'] = array(
+    t('OSSO Provider'),
+  );
+
+  $export['osso_provider_login'] = $context;
+  return $export;
+}
+
+/**
  * Helper to implementation of hook_ctools_plugin_api().
  */
 function _osso_provider_ctools_plugin_api() {
   $args = func_get_args();
   $module = array_shift($args);
   $api = array_shift($args);
-  if ($module == "strongarm" && $api == "strongarm") {
+  if ($module == "context" && $api == "context") {
+    return array("version" => 3);
+  }
+  else if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => 1);
   }
 }
