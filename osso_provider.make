@@ -1,5 +1,10 @@
 core = "6.x"
 
+; KeyAuth
+projects[keyauth][type] = "module"
+projects[keyauth][download][type] = "git"
+projects[keyauth][download][url] = "git://github.com/developmentseed/keyauth.git"
+
 ; Open ID Provider
 projects[openid_provider][type] = "module"
 projects[openid_provider][download][type] = "cvs"
