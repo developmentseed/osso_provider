@@ -1,5 +1,8 @@
 core = "6.x"
 
+; Drupal queue
+projects[drupal_queue][version] = "1.0-beta1"
+
 ; KeyAuth
 projects[keyauth][type] = "module"
 projects[keyauth][download][type] = "git"
