@@ -1,0 +1,100 @@
+<?php
+
+include_once('push_user.features.inc');
+
+/**
+ * Implementation of hook_menu().
+ */
+function push_user_menu() {
+  $items = array();
+  $items['user/feed'] = array(
+   'page callback' => 'push_user_feed',
+   'access callback' => 'push_user_feed_access',
+   'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_user(). Notify hub if user account changes.
+ */
+function push_user_user($op, &$edit, &$account, $category = NULL) {
+  switch ($op) {
+    case 'insert':
+    case 'after_update':
+      // Issue a light ping to force authentication for content, underneath an
+      // example how a fat ping would look like. Supress notifications on
+      // install.
+      if (!defined('MAINTENANCE_MODE') || MAINTENANCE_MODE != 'install') {
+        push_hub_notify(push_user_feed_url($account->uid), NULL, TRUE);
+        // push_hub_notify(push_user_feed_url($account->uid), theme('push_user_feed', $account), TRUE);
+      }
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function push_user_theme() {
+  return array(
+    'push_user_feed' => array(
+      'arguments' => array(
+        'account' => NULL,
+        'hub' => NULL,
+      ),
+      'template' => 'push_user_feed',
+    ),
+  );
+}
+
+/**
+ * Access callback for user feed.
+ */
+function push_user_feed_access() {
+  keyauth_include();
+  return keyauth_verify_url($_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+}
+
+/**
+ * Feed of user changes.
+ */
+function push_user_feed() {
+  if ($_GET['openid']) {
+    preg_match('/user\/(\d*?)\/identity/', $_GET['openid'], $matches);
+    $uid = $matches[1];
+  }
+  elseif ($_GET['uid']) {
+    $uid = $_GET['uid'];
+  }
+  if (isset($uid) && is_numeric($uid) && $account = user_load(array('uid' => $uid))) {
+    drupal_set_header('Content-Type: application/xml; charset=UTF-8');
+    print theme('push_user_feed', $account);
+    exit();
+  }
+  drupal_access_denied();
+}
+
+/**
+ * Create a full feed URL for a given user.
+ */
+function push_user_feed_url($uid) {
+  return url('user/feed', array('query' => 'openid='. urlencode(url('user/'. $uid .'/identity', array('absolute' => TRUE))), 'absolute' => TRUE));
+}
+
+/**
+ * Preprocessor for push_user_feed.
+ */
+function template_preprocess_push_user_feed(&$vars) {
+  $account = $vars['account'];
+  $vars['hub'] = url('pubsubhubbub/endpoint', array('absolute' => TRUE));
+  $vars['feed_url'] = push_user_feed_url($account->uid);
+  $vars['feed_title'] = t('Account information for @user', array('@user' => $account->name));
+  $vars['updated'] = gmdate('Y-m-d\TH:i:s\Z'); // For lack of real updated date.
+  $vars['site_name'] = variable_get('site_name', 'Drupal');
+  $vars['site_url'] = url('', array('absolute' => TRUE));
+  $vars['user_name'] = check_plain($account->name);
+  $vars['user_url'] = url('user/'. $account->uid, array('absolute' => TRUE));
+  $vars['user_openid'] = url('user/'. $account->uid .'/identity', array('absolute' => TRUE));
+  $vars['user_mail'] = 'mailto:'. $account->mail;
+}
