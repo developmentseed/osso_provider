@@ -26,3 +26,12 @@ function osso_provider_strongarm() {
   $args = func_get_args();
   return call_user_func_array('_osso_provider_strongarm', $args);
 }
+
+/**
+ * Implementation of hook_views_default_views().
+ */
+function osso_provider_views_default_views() {
+  module_load_include('inc', 'osso_provider', 'osso_provider.features.views');
+  $args = func_get_args();
+  return call_user_func_array('_osso_provider_views_default_views', $args);
+}
