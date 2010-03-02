@@ -1,18 +1,28 @@
 <?php
 
 /**
- * Helper to implementation of hook_user_default_permissions().
+ * Helper to implementation of hook_ctools_plugin_api().
  */
-function _osso_provider_user_default_permissions() {
-  $permissions = array();
+function _osso_provider_ctools_plugin_api() {
+  $args = func_get_args();
+  $module = array_shift($args);
+  $api = array_shift($args);
+  if ($module == "strongarm" && $api == "strongarm") {
+    return array("version" => 1);
+  }
+}
 
-  // Exported permission: change own username
-  $permissions[] = array(
-    'name' => 'change own username',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
+/**
+ * Helper to implementation of hook_strongarm().
+ */
+function _osso_provider_strongarm() {
+  $export = array();
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'user_email_verification';
+  $strongarm->value = TRUE;
 
-  return $permissions;
+  $export['user_email_verification'] = $strongarm;
+  return $export;
 }

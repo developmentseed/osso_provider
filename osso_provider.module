@@ -40,16 +40,6 @@ function osso_provider_user($op, &$edit, &$account) {
 }
 
 /**
- * Implementation of hook_strongarm().
- */
-function osso_provider_strongarm() {
-  return array (
-    'site_frontpage' => 'activity',
-    'user_email_verification' => 0,
-  );
-}
-
-/**
  * Implementation hook_menu_alter().
  */
 function osso_provider_menu_alter(&$items) {
