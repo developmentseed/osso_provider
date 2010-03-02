@@ -9,15 +9,8 @@ function osso_provider_block($op = 'list', $delta = '') {
   switch ($op) {
     case 'list':
       return array(
-        'dummy_profile' => array(
-          'info' => t('Dummy user profile'),
-        ),
-        'login_message' => array(
-          'info' => t('Login page message'),
-        ),
-        'welcome_message' => array(
-          'info' => t('Welcome message'),
-        ),
+        'login_message' => array('info' => t('Login page message')),
+        'welcome_message' => array('info' => t('Welcome message')),
       );
     case 'view':
       if (function_exists('osso_provider_block_'. $delta)) {
@@ -106,29 +99,6 @@ function osso_hub_bar() {
   $output .= theme('item_list', $items, NULL, 'ul', array('class' => 'links user-links'));
 
   return $output;
-}
-
-/**
- * User profile block.
- */
-function osso_provider_block_dummy_profile() {
-  $name = 'John Smith';
-  if (arg(0) == 'user' && is_numeric(arg(1))) {
-    if ($account = user_load(array('uid' => arg(1)))) {
-      $name = check_plain($account->name);
-    }
-  }
-  $items = array(
-    '<span class="user-profile-picture"></span>',
-    '<span class="item-title">Name:</span> <span class="item-content">'. $name .'</span>',
-    '<span class="item-title">Location:</span> <span class="item-content">Washington, DC</span>',
-    '<span class="item-title">Bio:</span> <span class="item-content">One-hundred and forty characters about the user would be a good thing to put in this area. Of course, that number is completely arbitrary.</span>',
-  );
-  $content = theme('item_list', $items, NULL, 'ul', array('class' => 'user-profile'));
-  return array(
-    'title' => t('Profile'),
-    'content' => $content,
-  );
 }
 
 /**
