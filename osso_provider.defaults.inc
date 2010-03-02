@@ -33,6 +33,12 @@ function _osso_provider_context_default_contexts() {
           'region' => 'right',
           'weight' => 0,
         ),
+        'views-osso_provider_sites-block_1' => array(
+          'module' => 'views',
+          'delta' => 'osso_provider_sites-block_1',
+          'region' => 'right',
+          'weight' => 1,
+        ),
       ),
       'layout' => 'default',
     ),
@@ -44,6 +50,38 @@ function _osso_provider_context_default_contexts() {
   );
 
   $export['osso_provider_login'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
+  $context->name = 'osso_provider_user';
+  $context->description = '';
+  $context->tag = 'OSSO Provider';
+  $context->conditions = array(
+    'user_page' => array(
+      'values' => array(
+        'current' => 'current',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-osso_provider_sites-block_2' => array(
+          'module' => 'views',
+          'delta' => 'osso_provider_sites-block_2',
+          'region' => 'right',
+          'weight' => 0,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  $translatables['osso_provider_user'] = array(
+    t('OSSO Provider'),
+  );
+
+  $export['osso_provider_user'] = $context;
   return $export;
 }
 

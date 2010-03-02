@@ -107,12 +107,13 @@ function osso_hub_bar() {
 function osso_provider_block_login_message() {
   $output = '<div class="sso-message">';
   if (isset($_SESSION['openid_provider']['request']['openid.realm']) && $relying_party = openid_provider_sso_relying_party($_SESSION['openid_provider']['request']['openid.realm'])) {
-    drupal_set_title(t('Sign in to @relying_party', array('@relying_party' => $relying_party['name'])));
+    drupal_set_title(t('Login to @relying_party', array('@relying_party' => $relying_party['name'])));
     $output .= '<p>'. t('<strong>@relying_party</strong> is part of <strong>@site_name</strong>. ', array('@site_name' => variable_get('site_name', 'Drupal'), '@relying_party' => $relying_party['name'])) .'</p>';
   }
   $output .= '<p>'. t('An account on @site_name gives you easy access to a series of sites with a single username and password.', array('@site_name' => variable_get('site_name', 'Drupal'))) .'</p>';
   $output .= '</div>';
   return array(
+    'subject' => t('User login'),
     'content' => $output,
   );
 }
@@ -139,4 +140,43 @@ function osso_provider_block_welcome_message() {
     'title' => t('Welcome'),
     'content' => $content,
   );
+}
+
+/**
+ * Implementation of hook_context_plugins().
+ *
+ * This is a ctools plugins hook.
+ */
+function osso_provider_context_plugins() {
+  return array(
+    'osso_provider_context_condition_user_page' => array(
+      'handler' => array(
+        'path' => drupal_get_path('module', 'osso_provider') .'/plugins',
+        'file' => 'osso_provider_context_condition_user_page.inc',
+        'class' => 'osso_provider_context_condition_user_page',
+        'parent' => 'context_condition',
+      ),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_context_registry().
+ */
+function osso_provider_context_registry() {
+  $registry = array();
+  $registry['conditions'] = array(
+    'user_page' => array(
+      'title' => t('User page'),
+      'description' => t('Set this context when viewing a user page.'),
+      'plugin' => 'osso_provider_context_condition_user_page',
+    ),
+  );
+  return $registry;
+}
+
+function osso_provider_context_page_condition() {
+  if ($plugin = context_get_plugin('condition', 'user_page')) {
+    $plugin->execute();
+  }
 }

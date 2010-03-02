@@ -46,6 +46,9 @@ function _osso_provider_views_default_views() {
       'table' => 'openid_provider_sso_rps',
       'field' => 'name',
       'relationship' => 'none',
+      'override' => array(
+        'button' => 'Override',
+      ),
     ),
     'realm' => array(
       'label' => '',
@@ -101,11 +104,17 @@ function _osso_provider_views_default_views() {
   ));
   $handler->override_option('title', 'Affiliate sites');
   $handler->override_option('use_ajax', TRUE);
+  $handler->override_option('items_per_page', 5);
   $handler->override_option('use_pager', 'mini');
   $handler->override_option('style_plugin', 'list');
   $handler->override_option('style_options', array(
     'grouping' => '',
     'type' => 'ul',
+  ));
+  $handler->override_option('row_options', array(
+    'inline' => array(),
+    'separator' => '',
+    'hide_empty' => 0,
   ));
   $handler = $view->new_display('block', 'Affiliate sites', 'block_1');
   $handler->override_option('block_description', 'Affiliate sites');
@@ -153,6 +162,9 @@ function _osso_provider_views_default_views() {
       'table' => 'openid_provider_sso_rps',
       'field' => 'name',
       'relationship' => 'none',
+      'override' => array(
+        'button' => 'Use default',
+      ),
     ),
     'realm' => array(
       'label' => '',
