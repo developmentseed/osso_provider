@@ -172,7 +172,7 @@ function _osso_provider_views_default_views() {
         'alter_text' => 0,
         'text' => '',
         'make_link' => 1,
-        'path' => '[realm]user',
+        'path' => '[realm]user?identifier',
         'link_class' => '',
         'alt' => '',
         'prefix' => '',
@@ -196,7 +196,7 @@ function _osso_provider_views_default_views() {
       'field' => 'realm',
       'relationship' => 'none',
       'override' => array(
-        'button' => 'Override',
+        'button' => 'Use default',
       ),
     ),
   ));

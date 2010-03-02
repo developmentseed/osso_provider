@@ -33,12 +33,6 @@ function _osso_provider_context_default_contexts() {
           'region' => 'right',
           'weight' => 0,
         ),
-        'views-osso_provider_sites-block_1' => array(
-          'module' => 'views',
-          'delta' => 'osso_provider_sites-block_1',
-          'region' => 'right',
-          'weight' => 1,
-        ),
       ),
       'layout' => 'default',
     ),
