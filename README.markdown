@@ -11,6 +11,7 @@ OSSO = OpenID Simple Sign On
 4. Install OSSO Provider module from admin/build/features page.
 5. Go to admin/settings/openid-provider-sso and add trusted Relying Party sites
    (the assumption is that all of these sites have the [OSSO
-   Relying](https://github.com/developmentseed/osso_relying) module installed.
+   Relying](https://github.com/developmentseed/osso_relying) feature installed.
 6. Optionally, go to atrium/features and your site to "public access, open
    registration"
+
