@@ -1,37 +1,23 @@
 <?php
 
 /**
- * Implementation of hook_context_default_contexts().
- */
-function osso_provider_context_default_contexts() {
-  module_load_include('inc', 'osso_provider', 'osso_provider.defaults');
-  $args = func_get_args();
-  return call_user_func_array('_osso_provider_context_default_contexts', $args);
-}
-
-/**
  * Implementation of hook_ctools_plugin_api().
  */
 function osso_provider_ctools_plugin_api() {
-  module_load_include('inc', 'osso_provider', 'osso_provider.defaults');
-  $args = func_get_args();
-  return call_user_func_array('_osso_provider_ctools_plugin_api', $args);
+  list($module, $api) = func_get_args();
+  if ($module == "context" && $api == "context") {
+    return array("version" => 3);
+  }
+  elseif ($module == "strongarm" && $api == "strongarm") {
+    return array("version" => 1);
+  }
 }
 
 /**
- * Implementation of hook_strongarm().
+ * Implementation of hook_views_api().
  */
-function osso_provider_strongarm() {
-  module_load_include('inc', 'osso_provider', 'osso_provider.defaults');
-  $args = func_get_args();
-  return call_user_func_array('_osso_provider_strongarm', $args);
-}
-
-/**
- * Implementation of hook_views_default_views().
- */
-function osso_provider_views_default_views() {
-  module_load_include('inc', 'osso_provider', 'osso_provider.features.views');
-  $args = func_get_args();
-  return call_user_func_array('_osso_provider_views_default_views', $args);
+function osso_provider_views_api() {
+  return array(
+    'api' => '2',
+  );
 }
